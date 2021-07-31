@@ -26,6 +26,11 @@ public class BlockSpawner : MonoBehaviour
         {
             Time.timeScale = (Time.timeScale == 0f) ? 1f : 0f;
         }
+
+        if (Input.GetKeyUp(KeyCode.Escape))
+        {
+            CreateLevel();
+        }
     }
 
     private void CreateLevel()
@@ -34,15 +39,34 @@ public class BlockSpawner : MonoBehaviour
         int startPositionX = (int)blockPosition.x - s_blocksInLine / 2;
         blockPosition.x = startPositionX;
 
+        int passIndexMin, passIndexMax;
+        _passIndex = Random.Range(1, s_blocksInLine - 1);
+
         for (int i = 0; i < startCountBlocksLines; i++)
         {
-            if (i % 2 == 0)
-                _passIndex = Random.Range(1, s_blocksInLine - 1);
+            if (i % 2 != 0)
+            {
+                passIndexMin = _passIndex;
+                passIndexMax = Random.Range(1, s_blocksInLine - 1);
+                _passIndex = passIndexMax;
 
+                if (passIndexMin > passIndexMax)
+                {
+                    int temp = passIndexMin;
+                    passIndexMin = passIndexMax;
+                    passIndexMax = temp;
+                }
+            }
+            else
+            {
+                passIndexMin = passIndexMax = _passIndex;
+            }
+            
             for (int j = 0; j < s_blocksInLine; j++)
             {
-                if (j != _passIndex)
+                if (j < passIndexMin || j > passIndexMax)
                     CreateBlock(blockPosition);
+
                 blockPosition.x++;
             }
 
@@ -55,6 +79,5 @@ public class BlockSpawner : MonoBehaviour
     {
         Block block = Lean.Pool.LeanPool.Spawn(standartBlock).GetComponent<Block>();
         block.SetParameters(fallingSpeed + _level * increasingSpeed, blockPosition);
-
     }
 }
