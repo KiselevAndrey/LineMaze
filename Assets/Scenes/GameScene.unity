@@ -753,8 +753,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   standartBlock: {fileID: 675102232}
-  startCountBlocksLines: 0
-  fallingSpeed: 0
+  startCountBlocksLines: 5
+  fallingSpeed: 2
   howManyLinesToAdd: 0
   increasingSpeed: 0
 --- !u!1 &1647491652
