@@ -9,7 +9,6 @@ public class BlockSpawner : MonoBehaviour
     [SerializeField, Min(5), Tooltip("How many lines of blocks are there at the start")] private int startCountBlocksLines;
     [SerializeField, Min(0), Tooltip("How fast are the blocks falling")] private float fallingSpeed;
     [SerializeField, Min(0), Tooltip("How many lines to add")] private int howManyLinesToAdd;
-    [SerializeField, Min(0), Tooltip("How fast the speed increases")] private float increasingSpeed;
 
     private int _level;
     private int _passIndex;
@@ -77,7 +76,6 @@ public class BlockSpawner : MonoBehaviour
 
     private void CreateBlock(Vector2 blockPosition)
     {
-        Block block = Lean.Pool.LeanPool.Spawn(standartBlock).GetComponent<Block>();
-        block.SetParameters(fallingSpeed + _level * increasingSpeed, blockPosition);
+        Lean.Pool.LeanPool.Spawn(standartBlock, blockPosition, Quaternion.identity);
     }
 }
