@@ -10,6 +10,7 @@ public class PlayerManager : MonoBehaviour
 
     [Header("References")]
     [SerializeField] private Transform dotTransform;
+    [SerializeField] private Camera mainCamera;
 
     private void Update()
     {
@@ -27,13 +28,7 @@ public class PlayerManager : MonoBehaviour
         if (Input.touchCount > 0)
         {
             Touch touch = Input.GetTouch(0);
-            print(touch.position);
-            dotTransform.DOMoveX(touch.position.x, 0.1f);
-        }
-
-        if(isTest && Input.GetMouseButtonUp(0))
-        {
-            dotTransform.DOMoveX(Input.mousePosition.x, 0.1f);
+            dotTransform.DOMoveX(mainCamera.ScreenToWorldPoint(touch.position).x, 0f);
         }
     }
 }
