@@ -4,20 +4,29 @@ public class BlockSpawner : MonoBehaviour
 {
     [Header("Blocks")]
     [SerializeField] private GameObject standartBlock;
+    [SerializeField] private GameObject waterBlock;
+    [SerializeField] private GameObject jumpBlock;
 
     [Header("Parameters")]
     [SerializeField, Min(5), Tooltip("How many lines of blocks are there at the start")] private int startCountBlocksLines;
-    [SerializeField, Min(0), Tooltip("How fast are the blocks falling")] private float fallingSpeed;
     [SerializeField, Min(0), Tooltip("How many lines to add")] private int howManyLinesToAdd;
 
     private int _level;
     private int _passIndex;
     private static int s_blocksInLine = 7;
 
+    #region Awake Destroy
     private void Awake()
     {
-        CreateLevel();  
+        CreateLevel();
+        DotManager.LevelComplete += NewLevel;
     }
+
+    private void OnDestroy()
+    {
+        DotManager.LevelComplete -= NewLevel;
+    }
+    #endregion
 
     private void Update()
     {
@@ -32,6 +41,7 @@ public class BlockSpawner : MonoBehaviour
         }
     }
 
+    #region Create
     private void CreateLevel()
     {
         Vector2 blockPosition = transform.position;
@@ -64,7 +74,10 @@ public class BlockSpawner : MonoBehaviour
             for (int j = 0; j < s_blocksInLine; j++)
             {
                 if (j < passIndexMin || j > passIndexMax)
-                    CreateBlock(blockPosition);
+                    CreateBlock(standartBlock, blockPosition);
+
+                if (i == startCountBlocksLines - 1 && j == _passIndex)
+                    CreateBlock(jumpBlock, blockPosition);
 
                 blockPosition.x++;
             }
@@ -72,10 +85,20 @@ public class BlockSpawner : MonoBehaviour
             blockPosition.y++;
             blockPosition.x = startPositionX;
         }
+
+        blockPosition.x = 0;
+        CreateBlock(waterBlock, blockPosition);
     }
 
-    private void CreateBlock(Vector2 blockPosition)
+    private void CreateBlock(GameObject spawnBlock, Vector2 blockPosition)
     {
-        Lean.Pool.LeanPool.Spawn(standartBlock, blockPosition, Quaternion.identity);
+        Lean.Pool.LeanPool.Spawn(spawnBlock, blockPosition, Quaternion.identity);
+    }
+    #endregion
+
+    private void NewLevel()
+    {
+        startCountBlocksLines += howManyLinesToAdd;
+        CreateLevel();
     }
 }

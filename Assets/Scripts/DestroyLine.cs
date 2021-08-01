@@ -2,9 +2,9 @@
 
 public class DestroyLine : MonoBehaviour
 {
-    private void OnCollisionEnter2D(Collision2D collision)
+    private void OnTriggerEnter2D(Collider2D collision)
     {
-        if(collision.gameObject.CompareTag("Block"))
+        if (collision.gameObject.CompareTag("Block"))
         {
             Lean.Pool.LeanPool.Despawn(collision.gameObject);
         }

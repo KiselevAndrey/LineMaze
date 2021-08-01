@@ -12,15 +12,31 @@ public class PlayerManager : MonoBehaviour
     [SerializeField] private Transform dotTransform;
     [SerializeField] private Camera mainCamera;
 
+    private float _speed;
+
+    #region Awake Destroy
+    private void Awake()
+    {
+        _speed = speed;
+        DotManager.LevelComplete += NewLevel;
+    }
+
+    private void OnDestroy()
+    {
+        DotManager.LevelComplete -= NewLevel;
+    }
+    #endregion
+
     private void Update()
     {
         MoveDot();
         MoveUp();
     }
 
+    #region Move
     private void MoveUp()
     {
-        transform.DOMoveY(transform.position.y + speed * Time.deltaTime, Time.deltaTime);
+        transform.DOMoveY(transform.position.y + _speed * Time.deltaTime, Time.deltaTime);
     }
 
     private void MoveDot()
@@ -30,5 +46,11 @@ public class PlayerManager : MonoBehaviour
             Touch touch = Input.GetTouch(0);
             dotTransform.DOMoveX(mainCamera.ScreenToWorldPoint(touch.position).x, 0f);
         }
+    }
+    #endregion
+
+    private void NewLevel()
+    {
+        _speed += increasingSpeed;
     }
 }
