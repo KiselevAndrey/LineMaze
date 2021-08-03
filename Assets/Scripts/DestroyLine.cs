@@ -1,8 +1,6 @@
-﻿using UnityEngine;
-
-public class DestroyLine : MonoBehaviour
+﻿public class DestroyLine : UnityEngine.MonoBehaviour
 {
-    private void OnTriggerEnter2D(Collider2D collision)
+    private void OnTriggerEnter2D(UnityEngine.Collider2D collision)
     {
         if (collision.gameObject.CompareTag("Block"))
         {

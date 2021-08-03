@@ -17,11 +17,13 @@ public class PlayerManager : MonoBehaviour
     private void Awake()
     {
         DotManager.LevelComplete += NewLevel;
+        DotManager.IHit += EndGame;
     }
 
     private void OnDestroy()
     {
         DotManager.LevelComplete -= NewLevel;
+        DotManager.IHit -= EndGame;
     }
 
     private void OnEnable()
@@ -52,8 +54,15 @@ public class PlayerManager : MonoBehaviour
     }
     #endregion
 
+    #region Actions
     private void NewLevel()
     {
         Time.timeScale += increasingSpeed;
     }
+
+    private void EndGame()
+    {
+        _speed = 0f;
+    }
+    #endregion
 }

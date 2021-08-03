@@ -21,8 +21,8 @@ public class GameManager : MonoBehaviour
 
     private void OnEnable()
     {
-        //EnableMenu();
-        EnableGame();
+        EnableMenu();
+        //EnableGame();
     }
     #endregion
 
@@ -33,7 +33,7 @@ public class GameManager : MonoBehaviour
             list[i].SetActive(value);
     }
 
-    private void EnableMenu()
+    public void EnableMenu()
     {
         EnableListContent(activateMenu, true);
         EnableListContent(activateGame, false);
@@ -41,19 +41,20 @@ public class GameManager : MonoBehaviour
         Time.timeScale = 0f;
     }
 
-    private void EnableGame()
+    public void EnableGame()
     {
         EnableListContent(activateMenu, false);
         EnableListContent(activateGame, true);
         EnableListContent(activateAfterGame, false);
         Time.timeScale = 1f;
     }
+
     private void EnableAfterGame()
     {
         EnableListContent(activateMenu, false);
         EnableListContent(activateGame, false);
         EnableListContent(activateAfterGame, true);
-        Time.timeScale = 0f;
+        Time.timeScale = 1f;
     }
     #endregion
 }

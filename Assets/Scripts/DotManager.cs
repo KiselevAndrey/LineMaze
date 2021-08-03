@@ -8,15 +8,20 @@ public class DotManager : MonoBehaviour
 
     private void OnTriggerEnter2D(Collider2D collision)
     {
-        if(collision.gameObject.name == "Block Water")
+        switch (collision.gameObject.name)
         {
-            LevelComplete?.Invoke();
+            case "Block Water":
+                LevelComplete?.Invoke();
+                break;
+
+            default:
+                break;
         }
     }
 
     private void OnCollisionEnter2D(Collision2D collision)
     {
-        if(collision.gameObject.name == "Block Standart")
+        if (collision.gameObject.CompareTag("Block"))
         {
             IHit?.Invoke();
         }

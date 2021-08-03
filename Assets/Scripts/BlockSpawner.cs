@@ -18,13 +18,17 @@ public class BlockSpawner : MonoBehaviour
     #region Awake Destroy
     private void Awake()
     {
-        CreateLevel();
         DotManager.LevelComplete += NewLevel;
     }
 
     private void OnDestroy()
     {
         DotManager.LevelComplete -= NewLevel;
+    }
+
+    private void OnEnable()
+    {
+        CreateLevel();
     }
     #endregion
 
