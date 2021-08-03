@@ -4,7 +4,6 @@ using UnityEngine;
 public class PlayerManager : MonoBehaviour
 {
     [Header("Parameters")]
-    [SerializeField] private bool isTest;
     [SerializeField] private float speed;
     [SerializeField, Min(0), Tooltip("How fast the speed increases")] private float increasingSpeed;
 
@@ -14,16 +13,20 @@ public class PlayerManager : MonoBehaviour
 
     private float _speed;
 
-    #region Awake Destroy
+    #region Awake Destroy OnEnable
     private void Awake()
     {
-        _speed = speed;
         DotManager.LevelComplete += NewLevel;
     }
 
     private void OnDestroy()
     {
         DotManager.LevelComplete -= NewLevel;
+    }
+
+    private void OnEnable()
+    {
+        _speed = speed;
     }
     #endregion
 
@@ -51,6 +54,6 @@ public class PlayerManager : MonoBehaviour
 
     private void NewLevel()
     {
-        _speed += increasingSpeed;
+        Time.timeScale += increasingSpeed;
     }
 }
