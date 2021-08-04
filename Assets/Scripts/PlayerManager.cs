@@ -6,12 +6,19 @@ public class PlayerManager : MonoBehaviour
     [Header("Parameters")]
     [SerializeField] private float speed;
     [SerializeField, Min(0), Tooltip("How fast the speed increases")] private float increasingSpeed;
+    [SerializeField, Min(0)] private float addScoreToSec;
 
     [Header("References")]
     [SerializeField] private Transform dotTransform;
     [SerializeField] private Camera mainCamera;
 
+    [Header("UI")]
+    [SerializeField] private UnityEngine.UI.Text scoreText;
+    [SerializeField] private UnityEngine.UI.Text scoreAfterGameText;
+    [SerializeField] private UnityEngine.UI.Text recordText;
+
     private float _speed;
+    private float _score;
 
     #region Awake Destroy OnEnable
     private void Awake()
@@ -29,13 +36,18 @@ public class PlayerManager : MonoBehaviour
     private void OnEnable()
     {
         _speed = speed;
+        _score = 0;
+        dotTransform.DOLocalMoveX(0, 0.1f);
     }
     #endregion
 
+    #region Update
     private void Update()
     {
         MoveDot();
         MoveUp();
+
+        AddScoreFromUpdate();
     }
 
     #region Move
@@ -54,6 +66,13 @@ public class PlayerManager : MonoBehaviour
     }
     #endregion
 
+    private void AddScoreFromUpdate()
+    {
+        _score += addScoreToSec * Time.deltaTime;
+        scoreText.text = ((int)_score).ToString();
+    }
+    #endregion
+
     #region Actions
     private void NewLevel()
     {
@@ -63,6 +82,22 @@ public class PlayerManager : MonoBehaviour
     private void EndGame()
     {
         _speed = 0f;
+
+        scoreAfterGameText.text = ((int)_score).ToString();
+        CheckRecord();
     }
     #endregion
+
+    private void CheckRecord()
+    {
+        int record = PlayerPrefs.GetInt("Record", 0);
+
+        if (_score > record)
+        {
+            record = (int)_score;
+            PlayerPrefs.SetInt("Record", record);
+        }
+
+        recordText.text = record.ToString();
+    }
 }
