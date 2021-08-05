@@ -87,6 +87,7 @@ public class PlayerManager : MonoBehaviour
     {
         _inGame = false;
 
+        transform.DOLocalMoveX(transform.position.x, 0.1f);
         scoreAfterGameText.text = ((int)_score).ToString();
         CheckRecord();
     }
