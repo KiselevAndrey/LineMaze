@@ -19,6 +19,7 @@ public class PlayerManager : MonoBehaviour
 
     private float _speed;
     private float _score;
+    private bool _inGame;
 
     #region Awake Destroy OnEnable
     private void Awake()
@@ -38,12 +39,15 @@ public class PlayerManager : MonoBehaviour
         _speed = speed;
         _score = 0;
         dotTransform.DOLocalMoveX(0, 0.1f);
+        _inGame = true;
     }
     #endregion
 
     #region Update
     private void Update()
     {
+        if (!_inGame) return;
+
         MoveDot();
         MoveUp();
 
@@ -81,7 +85,7 @@ public class PlayerManager : MonoBehaviour
 
     private void EndGame()
     {
-        _speed = 0f;
+        _inGame = false;
 
         scoreAfterGameText.text = ((int)_score).ToString();
         CheckRecord();

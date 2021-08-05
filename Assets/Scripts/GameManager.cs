@@ -11,12 +11,12 @@ public class GameManager : MonoBehaviour
     #region Awake Destroy OnEnable
     private void Awake()
     {
-        DotManager.IHit += EnableAfterGame;
+        DotManager.IHit += EndGame;
     }
 
     private void OnDestroy()
     {
-        DotManager.IHit -= EnableAfterGame;
+        DotManager.IHit -= EndGame;
     }
 
     private void OnEnable()
@@ -57,4 +57,9 @@ public class GameManager : MonoBehaviour
         Time.timeScale = 1f;
     }
     #endregion
+
+    private void EndGame() 
+    {
+        Invoke(nameof(EnableAfterGame), 2f);
+    }
 }
