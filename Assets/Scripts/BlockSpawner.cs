@@ -14,10 +14,13 @@ public class BlockSpawner : MonoBehaviour
     private int _level;
     private int _passIndex;
     private static int s_blocksInLine = 7;
+    private Vector2 _step;
 
     #region Awake Destroy
     private void Awake()
     {
+        _step = standartBlock.transform.localScale;
+
         DotManager.LevelComplete += NewLevel;
     }
 
@@ -83,10 +86,10 @@ public class BlockSpawner : MonoBehaviour
                 if (i == startCountBlocksLines - 1 && j == _passIndex)
                     CreateBlock(jumpBlock, blockPosition);
 
-                blockPosition.x++;
+                blockPosition.x += _step.x;
             }
 
-            blockPosition.y++;
+            blockPosition.y += _step.y;
             blockPosition.x = startPositionX;
         }
 
