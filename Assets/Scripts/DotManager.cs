@@ -1,10 +1,23 @@
 ﻿using System;
+using DG.Tweening;
 using UnityEngine;
 
 public class DotManager : MonoBehaviour
 {
     public static Action LevelComplete;
     public static Action IHit;
+
+    private Sequence scaleSequence;
+
+    private void Awake()
+    {
+        scaleSequence = DOTween.Sequence();
+    }
+
+    private void OnEnable()
+    {
+        transform.DOScale(1f, 0.1f);
+    }
 
     private void OnTriggerEnter2D(Collider2D collision)
     {
@@ -14,7 +27,13 @@ public class DotManager : MonoBehaviour
                 LevelComplete?.Invoke();
                 break;
 
-            default:
+            case ObjectNames.BonusShrinking:
+                scaleSequence.Kill();
+                scaleSequence = DOTween.Sequence();
+                scaleSequence
+                    .Append(transform.DOScale(0.5f, 0.1f))
+                    .AppendInterval(5f)
+                    .Append(transform.DOScale(1f, 0.1f));
                 break;
         }
     }
@@ -27,4 +46,5 @@ public class DotManager : MonoBehaviour
             IHit?.Invoke();
         }
     }
+
 }

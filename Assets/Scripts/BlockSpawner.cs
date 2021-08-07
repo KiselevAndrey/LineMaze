@@ -9,6 +9,7 @@ public class BlockSpawner : MonoBehaviour
 
     [Header("Bonuses")]
     [SerializeField, Range(0, 100)] private int bonusChance;
+    [SerializeField, Range(0, 10)] private int bonusesCountInLevel;
     [SerializeField] private List<GameObject> bonusesList;
 
     [Header("Parameters")]
@@ -63,7 +64,7 @@ public class BlockSpawner : MonoBehaviour
         blockPosition.x = startPositionX;
 
         int passIndexMin, passIndexMax;
-        int bonusCount = 1;
+        int bonusCount = bonusesCountInLevel;
 
         _passIndex = Random.Range(1, s_blocksInLine - 1);
 
