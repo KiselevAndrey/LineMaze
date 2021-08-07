@@ -9,6 +9,7 @@ public class DotManager : MonoBehaviour
 
     [Header("References")]
     [SerializeField] private Collider2D dotCollider;
+    [SerializeField] private TrailRenderer trail;
     [SerializeField] private TimerUI timer;
     [SerializeField] private GameObject bonusCanvas;
     [SerializeField] private UnityEngine.UI.Text bonusName;
@@ -117,6 +118,7 @@ public class DotManager : MonoBehaviour
     private void Shrinking(bool active)
     {
         transform.DOScale(active ? 0.5f : 1f, 0.1f);
+        trail.DOResize(active ? 0.25f : 0.5f, 0f, 0.1f);
     }
 
     private void Destruction(bool active) => dotCollider.isTrigger = active;
