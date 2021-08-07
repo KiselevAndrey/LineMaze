@@ -15,9 +15,10 @@ public class BlockSpawner : MonoBehaviour
     [SerializeField, Min(5), Tooltip("How many lines of blocks are there at the start")] private int startCountBlocksLines;
     [SerializeField, Min(0), Tooltip("How many lines to add")] private int howManyLinesToAdd;
 
-    private int _level;
+    public float UpperLinePosition { get; private set; }
+
     private int _passIndex;
-    
+    private int _countBlocksLines;
     private static int s_blocksInLine = 7;
     private Vector2 _step;
 
@@ -36,6 +37,7 @@ public class BlockSpawner : MonoBehaviour
 
     private void OnEnable()
     {
+        _countBlocksLines = startCountBlocksLines;
         CreateLevel();
     }
     #endregion
@@ -65,7 +67,7 @@ public class BlockSpawner : MonoBehaviour
 
         _passIndex = Random.Range(1, s_blocksInLine - 1);
 
-        for (int i = 0; i < startCountBlocksLines; i++)
+        for (int i = 0; i < _countBlocksLines; i++)
         {
             #region Сalculating the passage
             if (i % 2 != 0)
@@ -113,6 +115,8 @@ public class BlockSpawner : MonoBehaviour
 
         blockPosition.x = 0;
         SpawnObject(waterBlock, blockPosition);
+
+        UpperLinePosition = blockPosition.y;
     }
 
     private void SpawnObject(GameObject spawnObject, Vector2 blockPosition)
@@ -123,7 +127,7 @@ public class BlockSpawner : MonoBehaviour
 
     private void NewLevel()
     {
-        startCountBlocksLines += howManyLinesToAdd;
+        _countBlocksLines += howManyLinesToAdd;
         CreateLevel();
     }
 }

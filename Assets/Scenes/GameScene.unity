@@ -5997,6 +5997,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1e14cc82d61f99c488f7c9a8379fa7b9, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  spawnLine: {fileID: 1587076836}
 --- !u!50 &958832769
 Rigidbody2D:
   serializedVersion: 4
@@ -6599,10 +6600,10 @@ MonoBehaviour:
     type: 3}
   waterBlock: {fileID: 1408848354291173999, guid: d566f6f287718554fa2422f9ce230473,
     type: 3}
-  bonusChance: 26
+  bonusChance: 0
   bonusesList:
   - {fileID: 5725754656155295947, guid: 67cbd98674463b041891571f521fa989, type: 3}
-  startCountBlocksLines: 5
+  startCountBlocksLines: 50
   howManyLinesToAdd: 1
 --- !u!1 &1691656034
 GameObject:
