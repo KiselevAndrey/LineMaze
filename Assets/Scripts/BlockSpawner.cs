@@ -8,8 +8,7 @@ public class BlockSpawner : MonoBehaviour
     [SerializeField] private GameObject waterBlock;
 
     [Header("Bonuses")]
-    [SerializeField, Range(0, 100)] private int bonusChance;
-    [SerializeField, Range(0, 10)] private int bonusesCountInLevel;
+    [SerializeField, Range(0, 10)] private float bonusChance;
     [SerializeField] private List<GameObject> bonusesList;
 
     [Header("Parameters")]
@@ -64,7 +63,6 @@ public class BlockSpawner : MonoBehaviour
         blockPosition.x = startPositionX;
 
         int passIndexMin, passIndexMax;
-        int bonusCount = bonusesCountInLevel;
 
         _passIndex = Random.Range(1, s_blocksInLine - 1);
 
@@ -98,12 +96,10 @@ public class BlockSpawner : MonoBehaviour
                     SpawnObject(standartBlock, blockPosition);
 
                 // create random bonus
-                else if (bonusCount > 0 && Random.value * 100 <= bonusChance)
+                else if (Random.value * 100 <= bonusChance)
                 {
                     GameObject bonus = bonusesList[Random.Range(0, bonusesList.Count)];
                     SpawnObject(bonus, blockPosition);
-
-                    bonusCount--;
                 }
 
                 blockPosition.x += _step.x;

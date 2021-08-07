@@ -4,19 +4,25 @@ using UnityEngine;
 
 public class DotManager : MonoBehaviour
 {
+    [SerializeField] private Collider2D dotCollider;
+    [SerializeField, Range(0, 10)] private float bonusDuration;
+
     public static Action LevelComplete;
     public static Action IHit;
 
-    private Sequence scaleSequence;
+    private Sequence _scaleSequence;
+    private Sequence _destructionSequence;
 
     private void Awake()
     {
-        scaleSequence = DOTween.Sequence();
+        _scaleSequence = DOTween.Sequence();
+        _destructionSequence = DOTween.Sequence();
     }
 
     private void OnEnable()
     {
         transform.DOScale(1f, 0.1f);
+        dotCollider.isTrigger = false;
     }
 
     private void OnTriggerEnter2D(Collider2D collision)
@@ -28,12 +34,25 @@ public class DotManager : MonoBehaviour
                 break;
 
             case ObjectNames.BonusShrinking:
-                scaleSequence.Kill();
-                scaleSequence = DOTween.Sequence();
-                scaleSequence
+                _scaleSequence.Kill();
+                _scaleSequence = DOTween.Sequence();
+                _scaleSequence
                     .Append(transform.DOScale(0.5f, 0.1f))
-                    .AppendInterval(5f)
+                    .AppendInterval(bonusDuration)
                     .Append(transform.DOScale(1f, 0.1f));
+                break;
+
+            case ObjectNames.BonusDestruction:
+                _destructionSequence.Kill();
+                _destructionSequence = DOTween.Sequence();
+                _destructionSequence
+                    .AppendCallback(() => dotCollider.isTrigger = true)
+                    .AppendInterval(bonusDuration)
+                    .AppendCallback(() => dotCollider.isTrigger = false);
+                break;
+
+            case ObjectNames.BlockStandart:
+                Lean.Pool.LeanPool.Despawn(collision.gameObject);
                 break;
         }
     }
