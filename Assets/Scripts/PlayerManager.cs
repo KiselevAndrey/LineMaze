@@ -75,7 +75,7 @@ public class PlayerManager : MonoBehaviour
 
     private void AddScoreFromUpdate()
     {
-        _score += addScoreToSec * Time.deltaTime;
+        _score += addScoreToSec * _speed * Time.deltaTime;
         scoreText.text = ((int)_score).ToString();
     }
     #endregion
@@ -83,7 +83,7 @@ public class PlayerManager : MonoBehaviour
     #region Actions
     private void NewLevel()
     {
-        Time.timeScale += increasingSpeed;
+        _speed += increasingSpeed;
     }
 
     private void EndGame()

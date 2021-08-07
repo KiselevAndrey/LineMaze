@@ -234,7 +234,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 94abe7bcdc1c5fa40beab68e83b79fa1, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  bonusDuration: 8.24
+  bonusDuration: 5
   dotCollider: {fileID: 5700015}
   trail: {fileID: 413658439}
   timer: {fileID: 803113567}
@@ -622,7 +622,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   speed: 3
   increasingSpeed: 0.1
-  addScoreToSec: 3
+  addScoreToSec: 1
   dotTransform: {fileID: 5700014}
   canvasTransform: {fileID: 803113563}
   mainCamera: {fileID: 519420031}
@@ -2041,7 +2041,7 @@ MonoBehaviour:
   - {fileID: 5725754656155295947, guid: 67cbd98674463b041891571f521fa989, type: 3}
   - {fileID: 4985108531767746025, guid: 9c973ad41178f0d44be162f9020d8051, type: 3}
   startCountBlocksLines: 5
-  howManyLinesToAdd: 1
+  howManyLinesToAdd: 2
 --- !u!1 &1691656034
 GameObject:
   m_ObjectHideFlags: 0

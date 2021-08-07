@@ -45,7 +45,6 @@ public class GameManager : MonoBehaviour
         EnableListContent(activateMenu, false);
         EnableListContent(activateGame, true);
         EnableListContent(activateAfterGame, false);
-        Time.timeScale = 1f;
     }
 
     private void EnableAfterGame()
