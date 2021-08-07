@@ -39,6 +39,7 @@ public class PlayerManager : MonoBehaviour
         _speed = speed;
         _score = 0;
         dotTransform.DOLocalMoveX(0, 0.1f);
+
         _inGame = true;
     }
     #endregion

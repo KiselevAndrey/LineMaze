@@ -10,7 +10,7 @@ public class DotManager : MonoBehaviour
     {
         switch (collision.gameObject.name)
         {
-            case "Block Water":
+            case ObjectNames.BlockWater:
                 LevelComplete?.Invoke();
                 break;
 

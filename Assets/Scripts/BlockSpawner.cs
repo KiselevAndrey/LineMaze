@@ -97,7 +97,7 @@ public class BlockSpawner : MonoBehaviour
                     SpawnObject(standartBlock, blockPosition);
 
                 // create random bonus
-                if (bonusCount > 0 && Random.value * 100 <= bonusChance)
+                else if (bonusCount > 0 && Random.value * 100 <= bonusChance)
                 {
                     GameObject bonus = bonusesList[Random.Range(0, bonusesList.Count)];
                     SpawnObject(bonus, blockPosition);

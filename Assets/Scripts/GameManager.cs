@@ -38,7 +38,6 @@ public class GameManager : MonoBehaviour
         EnableListContent(activateMenu, true);
         EnableListContent(activateGame, false);
         EnableListContent(activateAfterGame, false);
-        Time.timeScale = 0f;
     }
 
     public void EnableGame()
@@ -54,7 +53,8 @@ public class GameManager : MonoBehaviour
         EnableListContent(activateMenu, false);
         EnableListContent(activateGame, false);
         EnableListContent(activateAfterGame, true);
-        Time.timeScale = 1f;
+
+        Lean.Pool.LeanPool.DespawnAll();
     }
     #endregion
 
