@@ -10,7 +10,6 @@ public class DotManager : MonoBehaviour
     [Header("References")]
     [SerializeField] private Collider2D dotCollider;
     [SerializeField] private TrailRenderer trail;
-    [SerializeField] private TimerUI timer;
     [SerializeField] private GameObject bonusCanvas;
     [SerializeField] private UnityEngine.UI.Text bonusName;
 
@@ -20,10 +19,12 @@ public class DotManager : MonoBehaviour
     private enum Bonuses { Shrinking, Destruction };
     private Bonuses _lastBonus;
 
-    #region Awake OnEnable OnDestroy
+    private Sequence _bonusSequence;
+
+    #region Awake OnEnable
     private void Awake()
     {
-        TimerUI.TimerIsZero += EndBonus;
+        _bonusSequence = DOTween.Sequence();
     }
 
     private void OnEnable()
@@ -31,11 +32,6 @@ public class DotManager : MonoBehaviour
         Shrinking(false);
         Destruction(false);
         bonusCanvas.SetActive(false);
-    }
-
-    private void OnDestroy()
-    {
-        TimerUI.TimerIsZero -= EndBonus;
     }
     #endregion
 
@@ -49,12 +45,22 @@ public class DotManager : MonoBehaviour
                 break;
 
             case ObjectNames.BonusShrinking:
-                NewBonus(Bonuses.Shrinking);
+                _bonusSequence.Kill();
+                _bonusSequence = DOTween.Sequence();
+                _bonusSequence
+                    .AppendCallback(() => NewBonus(Bonuses.Shrinking))
+                    .AppendInterval(bonusDuration)
+                    .AppendCallback(() => EndBonus());
                 Lean.Pool.LeanPool.Despawn(collision.gameObject);
                 break;
 
             case ObjectNames.BonusDestruction:
-                NewBonus(Bonuses.Destruction);
+                _bonusSequence.Kill();
+                _bonusSequence = DOTween.Sequence();
+                _bonusSequence
+                    .AppendCallback(() => NewBonus(Bonuses.Destruction))
+                    .AppendInterval(bonusDuration)
+                    .AppendCallback(() => EndBonus());
                 Lean.Pool.LeanPool.Despawn(collision.gameObject);
                 break;
 
@@ -95,12 +101,11 @@ public class DotManager : MonoBehaviour
         _lastBonus = bonus;
 
         bonusCanvas.SetActive(true);
-        timer.SetTime(bonusDuration);
-        timer.isTick = true;
     }
 
     private void EndBonus()
     {
+
         switch (_lastBonus)
         {
             case Bonuses.Shrinking:
