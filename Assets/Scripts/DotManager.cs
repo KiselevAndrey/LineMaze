@@ -4,27 +4,41 @@ using UnityEngine;
 
 public class DotManager : MonoBehaviour
 {
-    [SerializeField] private Collider2D dotCollider;
+    [Header("Parameters")]
     [SerializeField, Range(0, 10)] private float bonusDuration;
+
+    [Header("References")]
+    [SerializeField] private Collider2D dotCollider;
+    [SerializeField] private TimerUI timer;
+    [SerializeField] private GameObject bonusCanvas;
+    [SerializeField] private UnityEngine.UI.Text bonusName;
 
     public static Action LevelComplete;
     public static Action IHit;
 
-    private Sequence _scaleSequence;
-    private Sequence _destructionSequence;
+    private enum Bonuses { Shrinking, Destruction };
+    private Bonuses _lastBonus;
 
+    #region Awake OnEnable OnDestroy
     private void Awake()
     {
-        _scaleSequence = DOTween.Sequence();
-        _destructionSequence = DOTween.Sequence();
+        TimerUI.TimerIsZero += EndBonus;
     }
 
     private void OnEnable()
     {
-        transform.DOScale(1f, 0.1f);
-        dotCollider.isTrigger = false;
+        Shrinking(false);
+        Destruction(false);
+        bonusCanvas.SetActive(false);
     }
 
+    private void OnDestroy()
+    {
+        TimerUI.TimerIsZero -= EndBonus;
+    }
+    #endregion
+
+    #region On Enter2D
     private void OnTriggerEnter2D(Collider2D collision)
     {
         switch (collision.gameObject.name)
@@ -34,21 +48,13 @@ public class DotManager : MonoBehaviour
                 break;
 
             case ObjectNames.BonusShrinking:
-                _scaleSequence.Kill();
-                _scaleSequence = DOTween.Sequence();
-                _scaleSequence
-                    .Append(transform.DOScale(0.5f, 0.1f))
-                    .AppendInterval(bonusDuration)
-                    .Append(transform.DOScale(1f, 0.1f));
+                NewBonus(Bonuses.Shrinking);
+                Lean.Pool.LeanPool.Despawn(collision.gameObject);
                 break;
 
             case ObjectNames.BonusDestruction:
-                _destructionSequence.Kill();
-                _destructionSequence = DOTween.Sequence();
-                _destructionSequence
-                    .AppendCallback(() => dotCollider.isTrigger = true)
-                    .AppendInterval(bonusDuration)
-                    .AppendCallback(() => dotCollider.isTrigger = false);
+                NewBonus(Bonuses.Destruction);
+                Lean.Pool.LeanPool.Despawn(collision.gameObject);
                 break;
 
             case ObjectNames.BlockStandart:
@@ -65,5 +71,55 @@ public class DotManager : MonoBehaviour
             IHit?.Invoke();
         }
     }
+    #endregion
+
+    #region Bonuses
+    private void NewBonus(Bonuses bonus)
+    {
+        EndBonus();
+
+        switch (bonus)
+        {
+            case Bonuses.Shrinking:
+                Shrinking(true);
+                bonusName.text = BonusName.Shrinking;
+                break;
+
+            case Bonuses.Destruction:
+                Destruction(true);
+                bonusName.text = BonusName.Destruction;
+                break;
+        }
+
+        _lastBonus = bonus;
+
+        bonusCanvas.SetActive(true);
+        timer.SetTime(bonusDuration);
+        timer.isTick = true;
+    }
+
+    private void EndBonus()
+    {
+        switch (_lastBonus)
+        {
+            case Bonuses.Shrinking:
+                Shrinking(false);
+                break;
+
+            case Bonuses.Destruction:
+                Destruction(false);
+                break;
+        }
+
+        bonusCanvas.SetActive(false);
+    }
+
+    private void Shrinking(bool active)
+    {
+        transform.DOScale(active ? 0.5f : 1f, 0.1f);
+    }
+
+    private void Destruction(bool active) => dotCollider.isTrigger = active;
+    #endregion
 
 }

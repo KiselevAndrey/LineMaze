@@ -10,6 +10,7 @@ public class PlayerManager : MonoBehaviour
 
     [Header("References")]
     [SerializeField] private Transform dotTransform;
+    [SerializeField] private Transform canvasTransform;
     [SerializeField] private Camera mainCamera;
 
     [Header("UI")]
@@ -67,6 +68,7 @@ public class PlayerManager : MonoBehaviour
         {
             Touch touch = Input.GetTouch(0);
             dotTransform.DOMoveX(mainCamera.ScreenToWorldPoint(touch.position).x, 0f);
+            canvasTransform.DOMoveX(dotTransform.position.x, 0.1f);
         }
     }
     #endregion
