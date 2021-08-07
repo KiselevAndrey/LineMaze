@@ -1,11 +1,15 @@
-﻿using UnityEngine;
+﻿using System.Collections.Generic;
+using UnityEngine;
 
 public class BlockSpawner : MonoBehaviour
 {
     [Header("Blocks")]
     [SerializeField] private GameObject standartBlock;
     [SerializeField] private GameObject waterBlock;
-    [SerializeField] private GameObject jumpBlock;
+
+    [Header("Bonuses")]
+    [SerializeField, Range(0, 100)] private int bonusChance;
+    [SerializeField] private List<GameObject> bonusesList;
 
     [Header("Parameters")]
     [SerializeField, Min(5), Tooltip("How many lines of blocks are there at the start")] private int startCountBlocksLines;
@@ -13,6 +17,7 @@ public class BlockSpawner : MonoBehaviour
 
     private int _level;
     private int _passIndex;
+    
     private static int s_blocksInLine = 7;
     private Vector2 _step;
 
@@ -56,10 +61,13 @@ public class BlockSpawner : MonoBehaviour
         blockPosition.x = startPositionX;
 
         int passIndexMin, passIndexMax;
+        int bonusCount = 1;
+
         _passIndex = Random.Range(1, s_blocksInLine - 1);
 
         for (int i = 0; i < startCountBlocksLines; i++)
         {
+            #region Сalculating the passage
             if (i % 2 != 0)
             {
                 passIndexMin = _passIndex;
@@ -77,29 +85,39 @@ public class BlockSpawner : MonoBehaviour
             {
                 passIndexMin = passIndexMax = _passIndex;
             }
-            
+            #endregion
+
+            #region Create Maze's line
             for (int j = 0; j < s_blocksInLine; j++)
             {
+                // create standart block
                 if (j < passIndexMin || j > passIndexMax)
-                    CreateBlock(standartBlock, blockPosition);
+                    SpawnObject(standartBlock, blockPosition);
 
-                if (i == startCountBlocksLines - 1 && j == _passIndex)
-                    CreateBlock(jumpBlock, blockPosition);
+                // create random bonus
+                if (bonusCount > 0 && Random.value * 100 <= bonusChance)
+                {
+                    GameObject bonus = bonusesList[Random.Range(0, bonusesList.Count)];
+                    SpawnObject(bonus, blockPosition);
+
+                    bonusCount--;
+                }
 
                 blockPosition.x += _step.x;
             }
+            #endregion
 
             blockPosition.y += _step.y;
             blockPosition.x = startPositionX;
         }
 
         blockPosition.x = 0;
-        CreateBlock(waterBlock, blockPosition);
+        SpawnObject(waterBlock, blockPosition);
     }
 
-    private void CreateBlock(GameObject spawnBlock, Vector2 blockPosition)
+    private void SpawnObject(GameObject spawnObject, Vector2 blockPosition)
     {
-        Lean.Pool.LeanPool.Spawn(spawnBlock, blockPosition, Quaternion.identity);
+        Lean.Pool.LeanPool.Spawn(spawnObject, blockPosition, Quaternion.identity);
     }
     #endregion
 

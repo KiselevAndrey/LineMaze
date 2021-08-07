@@ -6599,8 +6599,9 @@ MonoBehaviour:
     type: 3}
   waterBlock: {fileID: 1408848354291173999, guid: d566f6f287718554fa2422f9ce230473,
     type: 3}
-  jumpBlock: {fileID: 1408848354291173999, guid: c7afba2530768c246841f342df1a6e8a,
-    type: 3}
+  bonusChance: 26
+  bonusesList:
+  - {fileID: 5725754656155295947, guid: 67cbd98674463b041891571f521fa989, type: 3}
   startCountBlocksLines: 5
   howManyLinesToAdd: 1
 --- !u!1 &1691656034

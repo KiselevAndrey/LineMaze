@@ -1,10 +1,17 @@
-﻿public class DestroyLine : UnityEngine.MonoBehaviour
+﻿using UnityEngine;
+
+public class DestroyLine : MonoBehaviour
 {
-    private void OnTriggerEnter2D(UnityEngine.Collider2D collision)
+    [SerializeField] private Transform spawnLine;
+
+    private void OnTriggerEnter2D(Collider2D collision)
     {
-        if (collision.gameObject.CompareTag("Block"))
+        switch (collision.gameObject.tag)
         {
-            Lean.Pool.LeanPool.Despawn(collision.gameObject);
+            case "Block":
+            case "Bonus":
+                Lean.Pool.LeanPool.Despawn(collision.gameObject);
+                break;
         }
     }
 }
